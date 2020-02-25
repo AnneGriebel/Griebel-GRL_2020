@@ -59,9 +59,9 @@ calculate_uncorrected <- function (df, year,targetCol="NEE_VUT_REF",frequency="3
   subsetted = subset(df, df$Year==year)
   #calculate traditional budget based on simple sum of all observations and convert units 
   if(frequency == "30min") {
-    budget<-sum(subsetted[[targetCol]])*time_HH
+    budget<-sum(subsetted[[targetCol]])*flux_grams_HH
   } else if (frequency == "60min") {
-    budget<-sum(subsetted[[targetCol]])*time_HR
+    budget<-sum(subsetted[[targetCol]])*flux_grams_HR
   } else {
     print("only 30min or 60min frequency supported")
   }
@@ -120,9 +120,9 @@ calculate_standardized <- function (df, year,targetCol="NEE_VUT_REF",frequency="
   
   #step 3: integrate across all sectors
    if(frequency == "30min") {
-    new_budget_year <- sum(N_cor, NE_cor, E_cor, SE_cor, S_cor, SW_cor, W_cor, NW_cor, na.rm = TRUE)*time_HH
+    new_budget_year <- sum(N_cor, NE_cor, E_cor, SE_cor, S_cor, SW_cor, W_cor, NW_cor, na.rm = TRUE)*flux_grams_HH
   } else if (frequency == "60min") {
-    new_budget_year <- sum(N_cor, NE_cor, E_cor, SE_cor, S_cor, SW_cor, W_cor, NW_cor, na.rm = TRUE)*time_HR
+    new_budget_year <- sum(N_cor, NE_cor, E_cor, SE_cor, S_cor, SW_cor, W_cor, NW_cor, na.rm = TRUE)*flux_grams_HR
   } else {
     print("only 30min or 60min frequency supported")
   }
@@ -166,7 +166,7 @@ calculate_space_equitable <- function (df, year,targetCol="NEE_VUT_REF",frequenc
     SW_cor <- (48*365*0.125)*mean(subsetted_SW[[targetCol]])
     W_cor  <- (48*365*0.125)*mean(subsetted_W[[targetCol]])
     NW_cor <- (48*365*0.125)*mean(subsetted_NW[[targetCol]]) 
-    equit_budget_year <- sum(N_cor, NE_cor, E_cor, SE_cor, S_cor, SW_cor, W_cor, NW_cor, na.rm = TRUE)*time_HH
+    equit_budget_year <- sum(N_cor, NE_cor, E_cor, SE_cor, S_cor, SW_cor, W_cor, NW_cor, na.rm = TRUE)*flux_grams_HH
    } else if (frequency == "60min") {
      N_cor  <- (24*365*0.125)*mean(subsetted_N[[targetCol]])
      NE_cor <- (24*365*0.125)*mean(subsetted_NE[[targetCol]])
@@ -178,7 +178,7 @@ calculate_space_equitable <- function (df, year,targetCol="NEE_VUT_REF",frequenc
      NW_cor <- (24*365*0.125)*mean(subsetted_NW[[targetCol]]) 
     
      #step 3: sum across all sectors 
-    equit_budget_year <- sum(N_cor, NE_cor, E_cor, SE_cor, S_cor, SW_cor, W_cor, NW_cor, na.rm = TRUE)*time_HR
+    equit_budget_year <- sum(N_cor, NE_cor, E_cor, SE_cor, S_cor, SW_cor, W_cor, NW_cor, na.rm = TRUE)*flux_grams_HR
   } else {
     print("only 30min or 60min frequency supported")
   }
@@ -215,9 +215,9 @@ calculate_space_time_equitable <- function (df, year,targetCol="NEE_VUT_REF",fre
   space_means<-rowMeans(spti,na.rm=TRUE)
   space_time_means<-mean(space_means,na.rm=TRUE)
   if(frequency == "30min"){
-    space_time_equit_budget_year <- space_time_means*time_HH*obs_year_HH
+    space_time_equit_budget_year <- space_time_means*flux_grams_HH*obs_year_HH
   } else {
-    space_time_equit_budget_year <- space_time_means*time_HR*obs_year_HR
+    space_time_equit_budget_year <- space_time_means*flux_grams_HR*obs_year_HR
   }
   
   #check if normalization to number of observations is true 
